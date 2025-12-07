@@ -9,50 +9,47 @@
 namespace tinystl
 {
 
-// move：将左值转换为右值引用，供移动构造使用
-// 通过 std::remove_reference<T>::type 获取 T 类型，然后将其转换为右值引用
+	// move：将左值转换为右值引用，供移动构造使用
+	// 通过 std::remove_reference<T>::type 获取 T 类型，然后将其转换为右值引用
 
-template <class T>
-/**
- * @brief 将左值转换为右值引用
- *
- * @param arg 一个左值
- * @return T&& 一个右值引用
- */
-typename std::remove_reference<T>::type&& move(T&& arg) noexcept
-{
-    return static_cast<typename std::remove_reference<T>::type&&>(arg);
-}
+	template <class T>
+	/**
+	 * @brief 将左值转换为右值引用
+	 *
+	 * @param arg 一个左值
+	 * @return T&& 一个右值引用
+	 */
+	typename std::remove_reference<T>::type&& move(T&& arg) noexcept {
+		return static_cast<typename std::remove_reference<T>::type&&>(arg);
+	}
 
-// forward：用于完美转发，保留参数的左值或者右值属性，用作模板函数的参数
+	// forward：用于完美转发，保留参数的左值或者右值属性，用作模板函数的参数
 
-template <class T>
-/**
- * @brief 将左值引用转发为左值引用，这里涉及到引用折叠，可以查看note1.md
- *
- * @param arg 一个左值引用
- * @return T&& 一个左值引用
- */
-T&& forward(typename std::remove_reference<T>::type& arg) noexcept
-{
-    return static_cast<T&&>(arg);
-}
+	template <class T>
+	/**
+	 * @brief 将左值引用转发为左值引用，这里涉及到引用折叠，可以查看note1.md
+	 *
+	 * @param arg 一个左值引用
+	 * @return T&& 一个左值引用
+	 */
+	T&& forward(typename std::remove_reference<T>::type& arg) noexcept {
+		return static_cast<T&&>(arg);
+	}
 
-template <class T>
-/**
- * @brief 将右值引用和转发为右值引用
- *
- * @param arg 一个右值引用
- * @return T&& 一个右值引用
- */
-T&& forward(typename std::remove_reference<T>::type&& arg) noexcept
-{
-    // 静态断言， T 不是左值引用
-    static_assert(!std::is_lvalue_reference<T>::value, "bad forward");
-    return static_cast<T&&>(arg);
-}
-// swap
+	template <class T>
+	/**
+	 * @brief 将右值引用和转发为右值引用
+	 *
+	 * @param arg 一个右值引用
+	 * @return T&& 一个右值引用
+	 */
+	T&& forward(typename std::remove_reference<T>::type&& arg) noexcept {
+		// 静态断言， T 不是左值引用
+		static_assert(!std::is_lvalue_reference<T>::value, "bad forward");
+		return static_cast<T&&>(arg);
+	}
+	// swap
 
 }  // namespace tinystl
 
-#endif
+#endif // TINYSTL_UTIL_H_
