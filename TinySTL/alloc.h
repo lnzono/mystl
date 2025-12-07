@@ -32,7 +32,7 @@ namespace tinystl
 
 	public:
 		static void* allocate(size_t n);
-		static void8 deallocate(void* p, size_t n);
+		static void deallocate(void* p, size_t n);
 		static void* reallocate(void* p, size_t old_sz, size_t new_sz);
 
 	private:
@@ -46,7 +46,7 @@ namespace tinystl
 	// 静态成员变量的初始化
 	char* alloc::start_free = nullptr; // 内存池起始位置
 	char* alloc::end_free = nullptr; //	内存池结束位置
-	char* alloc::heap_size = 0; //	申请 heap 空间附加值的大小
+	size_t alloc::heap_size = 0; //	申请 heap 空间附加值的大小
 
 	FreeList* alloc::free_list[__NFREELISTS] = {
 	   nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,
