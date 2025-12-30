@@ -1,35 +1,35 @@
 #ifndef TINYSTL_ITERATOR_H_
 #define TINYSTL_ITERATOR_H_
 
-// Õâ¸öÍ·ÎÄ¼şÓÃÓÚµü´úÆ÷Éè¼Æ£¬°üº¬ÁËÒ»Ğ©Ä£°å½á¹¹ÌåÓëÈ«¾Öº¯Êı
+// è¿™ä¸ªå¤´æ–‡ä»¶ç”¨äºè¿­ä»£å™¨è®¾è®¡ï¼ŒåŒ…å«äº†ä¸€äº›æ¨¡æ¿ç»“æ„ä½“ä¸å…¨å±€å‡½æ•°
 #include <cstddef> // ptrdiff_t, size_t
 #include "type_traits.h"
 
 namespace tinystl {
-	// 5 ÖÖµü´úÆ÷ÀàĞÍ
-	struct input_iterator_tag {};	// ÊäÈëµü´úÆ÷£¬Ö»¶Á
-	struct output_iterator_tag {};	// Êä³öµü´úÆ÷£¬Ö»Ğ´
-	struct forward_iterator_tag :public input_iterator_tag {};	// Ç°Ïòµü´úÆ÷£¬¿É¶ÁĞ´
-	struct bidirectional_iterator_tag :public forward_iterator_tag {};	// Ë«Ïòµü´úÆ÷£¬Ë«Ïò
-	struct random_access_iterator_tag :public bidirectional_iterator_tag {};	//Ëæ»ú·ÃÎÊµü´úÆ÷£¬Ëæ»ú·ÃÎÊ
+	// 5 ç§è¿­ä»£å™¨ç±»å‹
+	struct input_iterator_tag {};	// è¾“å…¥è¿­ä»£å™¨ï¼Œåªè¯»
+	struct output_iterator_tag {};	// è¾“å‡ºè¿­ä»£å™¨ï¼Œåªå†™
+	struct forward_iterator_tag :public input_iterator_tag {};	// å‰å‘è¿­ä»£å™¨ï¼Œå¯è¯»å†™
+	struct bidirectional_iterator_tag :public forward_iterator_tag {};	// åŒå‘è¿­ä»£å™¨ï¼ŒåŒå‘
+	struct random_access_iterator_tag :public bidirectional_iterator_tag {};	//éšæœºè®¿é—®è¿­ä»£å™¨ï¼Œéšæœºè®¿é—®
 
-	// iterator Ä£°å½á¹¹Ìå£¬Èç¹ûÃ¿Ò»ĞÂµÄÉè¼ÆµÄµü´úÆ÷¶¼¼Ì³ĞËû£¬¾Í¿ÉÒÔ±£Ö¤·ûºÏ STL ¹æ·¶
+	// iterator æ¨¡æ¿ç»“æ„ä½“ï¼Œå¦‚æœæ¯ä¸€æ–°çš„è®¾è®¡çš„è¿­ä»£å™¨éƒ½ç»§æ‰¿ä»–ï¼Œå°±å¯ä»¥ä¿è¯ç¬¦åˆ STL è§„èŒƒ
 	template <class Category, class T, class Distance = ptrdiff_t, class Pointer = T*,
 		class Reference = T&>
 	struct iterator {
-		typedef Category iterator_category;	// µü´úÆ÷ÀàĞÍ
-		typedef T value_type;	// µü´úÆ÷ËùÖ¸¶ÔÏóµÄÀàĞÍ
-		typedef Distance difference_type;	// µü´úÆ÷Ö®¼äµÄ¾àÀë
-		typedef Pointer pointer;	// µü´úÆ÷ËùÖ¸¶ÔÏóµÄÖ¸Õë
-		typedef Reference reference;	// µü´úÆ÷ËùÖ¸¶ÔÏóµÄÒıÓÃ
+		typedef Category iterator_category;	// è¿­ä»£å™¨ç±»å‹
+		typedef T value_type;	// è¿­ä»£å™¨æ‰€æŒ‡å¯¹è±¡çš„ç±»å‹
+		typedef Distance difference_type;	// è¿­ä»£å™¨ä¹‹é—´çš„è·ç¦»
+		typedef Pointer pointer;	// è¿­ä»£å™¨æ‰€æŒ‡å¯¹è±¡çš„æŒ‡é’ˆ
+		typedef Reference reference;	// è¿­ä»£å™¨æ‰€æŒ‡å¯¹è±¡çš„å¼•ç”¨
 	};
 
 
 	// traits
 
 
-	// iterator_traits ½á¹¹Ìå¾ÍÊÇÊ¹ÓÃ typename ¶Ô²ÎÊıÀàĞÍµÄÌáÈ¡£¨İÍÈ¡£©£¬
-	// ²¢¶Ô²ÎÊıÀàĞÍÔÚ½øĞĞÒ»´ÎÃüÃû£¬¿´ÉÏÈ¥¶Ô²ÎÊıÀàĞÍµÄÊ¹ÓÃÓĞÁËÒ»²ã¼ä½ÓĞÔ
+	// iterator_traits ç»“æ„ä½“å°±æ˜¯ä½¿ç”¨ typename å¯¹å‚æ•°ç±»å‹çš„æå–ï¼ˆèƒå–ï¼‰ï¼Œ
+	// å¹¶å¯¹å‚æ•°ç±»å‹åœ¨è¿›è¡Œä¸€æ¬¡å‘½åï¼Œçœ‹ä¸Šå»å¯¹å‚æ•°ç±»å‹çš„ä½¿ç”¨æœ‰äº†ä¸€å±‚é—´æ¥æ€§
 	template <class Iterator>
 	struct iterator_traits {
 		typedef typename Iterator::iterator_category iterator_category;
@@ -39,20 +39,20 @@ namespace tinystl {
 		typedef typename Iterator::reference reference;
 	};
 
-	// Õë¶ÔÔ­ÉúÖ¸Õë £¨native pointer£©¶øÉè¼ÆµÄ traits Æ«ÌØ»¯°æ±¾
+	// é’ˆå¯¹åŸç”ŸæŒ‡é’ˆ ï¼ˆnative pointerï¼‰è€Œè®¾è®¡çš„ traits åç‰¹åŒ–ç‰ˆæœ¬
 	template <class T>
 	struct iterator_traits<T*> {
-		typedef random_access_iterator_tag iterator_category;	// Ô­ÉúÖ¸ÕëÊÇËæ»úµÄ·ÃÎÊµü´úÆ÷
+		typedef random_access_iterator_tag iterator_category;	// åŸç”ŸæŒ‡é’ˆæ˜¯éšæœºçš„è®¿é—®è¿­ä»£å™¨
 		typedef T value_type;
 		typedef ptrdiff_t difference_type;
 		typedef T* pointer;
 		typedef T& reference;
 	};
 
-	// Õë¶ÔÔ­ÉúÖ¸Õë £¨const native pointer£©¶øÉè¼ÆµÄ traits Æ«ÌØ»¯°æ±¾
+	// é’ˆå¯¹åŸç”ŸæŒ‡é’ˆ ï¼ˆconst native pointerï¼‰è€Œè®¾è®¡çš„ traits åç‰¹åŒ–ç‰ˆæœ¬
 	template <class T>
 	struct iterator_traits<const T*> {
-		typedef random_access_iterator_tag iterator_category;	// Ô­ÉúÖ¸ÕëÊÇËæ»úµÄ·ÃÎÊµü´úÆ÷
+		typedef random_access_iterator_tag iterator_category;	// åŸç”ŸæŒ‡é’ˆæ˜¯éšæœºçš„è®¿é—®è¿­ä»£å™¨
 		typedef T value_type;
 		typedef ptrdiff_t difference_type;
 		typedef const T* pointer;
@@ -60,34 +60,34 @@ namespace tinystl {
 	};
 
 	/**
-	 * @brief ÓÃÓÚ»ñÈ¡¸öµü´úÆ÷µÄ category
-	 * @tparam Iterator µü´úÆ÷ÀàĞÍ
-	 * @param µü´úÆ÷¶ÔÏó
-	 * @reurn  µü´úÆ÷ÀàĞÍ
+	 * @brief ç”¨äºè·å–ä¸ªè¿­ä»£å™¨çš„ category
+	 * @tparam Iterator è¿­ä»£å™¨ç±»å‹
+	 * @param è¿­ä»£å™¨å¯¹è±¡
+	 * @reurn  è¿­ä»£å™¨ç±»å‹
 	 */
 	template <class Iterator>
 	typename iterator_traits<Iterator>::iterator_category iterator_category(const Iterator&) {
 		typedef typename iterator_traits<Iterator>::iterator_category category;
-		return category(); // ·µ»ØÄ¬ÈÏ¹¹ÔìµÄ category ¶ÔÏó£¬¼´µü´úÆ÷µÄÀà±ğ
+		return category(); // è¿”å›é»˜è®¤æ„é€ çš„ category å¯¹è±¡ï¼Œå³è¿­ä»£å™¨çš„ç±»åˆ«
 	}
 
 	/**
-	 * @brief ÓÃÓÚ»ñÈ¡¸öµü´úÆ÷µÄ disstance_typr
-	 * @tparam Iterator µü´úÆ÷ÀàĞÍ
-	 * @param µü´úÆ÷¶ÔÏó
-	 * @reurn  µü´úÆ÷µÄ disstance_typr
+	 * @brief ç”¨äºè·å–ä¸ªè¿­ä»£å™¨çš„ disstance_typr
+	 * @tparam Iterator è¿­ä»£å™¨ç±»å‹
+	 * @param è¿­ä»£å™¨å¯¹è±¡
+	 * @reurn  è¿­ä»£å™¨çš„ disstance_typr
 	 */
 	template <class Iterator>
 	typename iterator_traits<Iterator>::difference_type* distance_type(const Iterator&) {
-		// ÕâÀïÓÃµ½ÁË 0 ¿ÉÒÔ×ª»»³ÉÖ¸ÕëµÄĞÔÖÊ£¬Ïàµ±ÓÚ·µ»ØÒ»¸ö¿ÕÖ¸Õë£¬µ«ÊÇ¿ÉÒÔÍ¨¹ıËûÃÇÈ·¶¨²»Í¬µÄ²ÎÊıÀàĞÍ
+		// è¿™é‡Œç”¨åˆ°äº† 0 å¯ä»¥è½¬æ¢æˆæŒ‡é’ˆçš„æ€§è´¨ï¼Œç›¸å½“äºè¿”å›ä¸€ä¸ªç©ºæŒ‡é’ˆï¼Œä½†æ˜¯å¯ä»¥é€šè¿‡ä»–ä»¬ç¡®å®šä¸åŒçš„å‚æ•°ç±»å‹
 		return static_cast<typename iterator_traits<Iterator>::difference_type*>(0);
 	}
 
 	/**
-	 * @brief ÓÃÓÚ»ñÈ¡¸öµü´úÆ÷µÄ value_type
-	 * @tparam Iterator µü´úÆ÷ÀàĞÍ
-	 * @param µü´úÆ÷¶ÔÏó
-	 * @reurn  µü´úÆ÷µÄ value_type
+	 * @brief ç”¨äºè·å–ä¸ªè¿­ä»£å™¨çš„ value_type
+	 * @tparam Iterator è¿­ä»£å™¨ç±»å‹
+	 * @param è¿­ä»£å™¨å¯¹è±¡
+	 * @reurn  è¿­ä»£å™¨çš„ value_type
 	 */
 	template <class Iterator>
 	typename iterator_traits<Iterator>::value_type* value_type(const Iterator&) {
@@ -99,13 +99,13 @@ namespace tinystl {
 
 
 	/**
-	 * @brief ¼ÆËãÁ½¸öµü´úÆ÷Ö®¼äµÄ¾àÀë
-	 * @tparam Iterator µü´úÆ÷ÀàĞÍ
-	 * @param first µÚÒ»¸öµü´úÆ÷
-	 * @param last µÚ¶ş¸öµü´úÆ÷
-	 * @reurn  Á½¸öµü´úÆ÷Ö®¼äµÄ¾àÀë
+	 * @brief è®¡ç®—ä¸¤ä¸ªè¿­ä»£å™¨ä¹‹é—´çš„è·ç¦»
+	 * @tparam Iterator è¿­ä»£å™¨ç±»å‹
+	 * @param first ç¬¬ä¸€ä¸ªè¿­ä»£å™¨
+	 * @param last ç¬¬äºŒä¸ªè¿­ä»£å™¨
+	 * @reurn  ä¸¤ä¸ªè¿­ä»£å™¨ä¹‹é—´çš„è·ç¦»
 	 */
-	template <class InputIterator> // Ëã·¨ËùÄÜ½ÓÊÜµÄ×îµÍ½×µü´úÆ÷ÀàĞÍ£¬À´ÎªÆäµü´úÆ÷Àà±ğ²ÎÊıÃüÃû
+	template <class InputIterator> // ç®—æ³•æ‰€èƒ½æ¥å—çš„æœ€ä½é˜¶è¿­ä»£å™¨ç±»å‹ï¼Œæ¥ä¸ºå…¶è¿­ä»£å™¨ç±»åˆ«å‚æ•°å‘½å
 	typename iterator_traits<InputIterator>::difference_type _distance(InputIterator first,
 		InputIterator last, input_iterator_tag) {
 		typename iterator_traits<InputIterator>::difference_type n = 0;
@@ -116,13 +116,13 @@ namespace tinystl {
 		return n;
 	}
 
-	template <class RandomAccessIterator> // Ëã·¨ËùÄÜ½ÓÊÜµÄ×îµÍ½×µü´úÆ÷ÀàĞÍ£¬À´ÎªÆäµü´úÆ÷Àà±ğ²ÎÊıÃüÃû
+	template <class RandomAccessIterator> // ç®—æ³•æ‰€èƒ½æ¥å—çš„æœ€ä½é˜¶è¿­ä»£å™¨ç±»å‹ï¼Œæ¥ä¸ºå…¶è¿­ä»£å™¨ç±»åˆ«å‚æ•°å‘½å
 	typename iterator_traits<RandomAccessIterator>::difference_type _distance(RandomAccessIterator first,
 		RandomAccessIterator last, random_access_iterator_tag) {
-		return last - first; // Ëæ»ú·ÃÎÊµü´úÆ÷¿ÉÒÔÖ±½ÓÏà¼õ 
+		return last - first; // éšæœºè®¿é—®è¿­ä»£å™¨å¯ä»¥ç›´æ¥ç›¸å‡ 
 	}
 
-	template <class InputIterator> // Ëã·¨ËùÄÜ½ÓÊÜµÄ×îµÍ½×µü´úÆ÷ÀàĞÍ£¬À´ÎªÆäµü´úÆ÷Àà±ğ²ÎÊıÃüÃû
+	template <class InputIterator> // ç®—æ³•æ‰€èƒ½æ¥å—çš„æœ€ä½é˜¶è¿­ä»£å™¨ç±»å‹ï¼Œæ¥ä¸ºå…¶è¿­ä»£å™¨ç±»åˆ«å‚æ•°å‘½å
 	typename iterator_traits<InputIterator>::difference_type distance(InputIterator first,
 		InputIterator last) {
 		typedef typename iterator_traits<InputIterator>::iterator_category category;
@@ -133,12 +133,12 @@ namespace tinystl {
 	// advance
 
 	/**
-	 * @brief Ê¹µü´úÆ÷Ç°½ø n ¸ö¾àÀë
-	 * @tparam InputIterator µü´úÆ÷ÀàĞÍ
-	 * @param Distance ¾àÀëÀàĞÍ
-	 * @param i µü´úÆ÷
-	 * @param n ¾àÀë
-	 * @param  µü´úÆ÷ÀàĞÍ
+	 * @brief ä½¿è¿­ä»£å™¨å‰è¿› n ä¸ªè·ç¦»
+	 * @tparam InputIterator è¿­ä»£å™¨ç±»å‹
+	 * @param Distance è·ç¦»ç±»å‹
+	 * @param i è¿­ä»£å™¨
+	 * @param n è·ç¦»
+	 * @param  è¿­ä»£å™¨ç±»å‹
 	 */
 	template <class InputIterator, class Distance>
 	void _advance(InputIterator& i, Distance n, input_iterator_tag) {

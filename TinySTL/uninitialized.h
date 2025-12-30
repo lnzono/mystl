@@ -1,9 +1,9 @@
 #ifndef TINYSTL_UNINITIALIZED_H_
 #define TINYSTL_UNINITIALIZED_H_
 
-//Õâ¸öÍ·ÎÄ¼şÓÃÓÚ³õÊ¼»¯Î´³õÊ¼»¯¿Õ¼ä¹¹ÔìÔªËØ
+//è¿™ä¸ªå¤´æ–‡ä»¶ç”¨äºåˆå§‹åŒ–æœªåˆå§‹åŒ–ç©ºé—´æ„é€ å…ƒç´ 
 
-//Éæ¼°µ½µÄÖªÊ¶µã£º£¨Ïê¼û Notes\Allocators\note3.md£©
+//æ¶‰åŠåˆ°çš„çŸ¥è¯†ç‚¹ï¼šï¼ˆè¯¦è§ Notes\Allocators\note3.mdï¼‰
 // 1.typename
 // 2.std::is_trivially_copy_assignable
 
@@ -12,22 +12,22 @@
 
 namespace tinystl
 {
-	// TODO£º¶Ô char* Óë wchar_t* ×öÌØ»¯´¦Àí
+	// TODOï¼šå¯¹ char* ä¸ wchar_t* åšç‰¹åŒ–å¤„ç†
 
 	/** ********************************************/
 	// uninitialized_copy
-	// ½« [first,last) ·¶Î§ÄÚµÄÔªËØ¿½±´¹¹Ôìµ½ÒÔ result ÎªÆğÊ¼Î»ÖÃµÄÎ´³õÊ¼»¯¿Õ¼ä
+	// å°† [first,last) èŒƒå›´å†…çš„å…ƒç´ æ‹·è´æ„é€ åˆ°ä»¥ result ä¸ºèµ·å§‹ä½ç½®çš„æœªåˆå§‹åŒ–ç©ºé—´
 	/** ********************************************/
 
 	/**
-	 * @brief °Ñ[first,last)·¶Î§ÄÚµÄÔªËØ¿½±´µ½ÒÔresultÎªÆğÊ¼Î»ÖÃµÄÎ´³õÊ¼»¯¿Õ¼ä£¬·µ»Ø¸´ÖÆ½áÊøµÄÎ»ÖÃ
-	 * @param InputIterator ÊäÈëµü´úÆ÷
-	 * @param ForwardIterator Ç°Ïòµü´úÆ÷
-	 * @param first ÊäÈëµü´úÆ÷µÄÆğÊ¼Î»ÖÃ
-	 * @param last ÊäÈëµü´úÆ÷µÄ½áÊøÎ»ÖÃ
-	 * @param reault Êä³öµü´úÆ÷µÄÄ¿±êÎ»ÖÃ
-	 * @param std::true_type ÓÃÓÚÇø·ÖÊÇ·ñÎªPODÀàĞÍ
-	 * @return ·µ»Ø¸´ÖÆ½áÊøµÄÎ»ÖÃ
+	 * @brief æŠŠ[first,last)èŒƒå›´å†…çš„å…ƒç´ æ‹·è´åˆ°ä»¥resultä¸ºèµ·å§‹ä½ç½®çš„æœªåˆå§‹åŒ–ç©ºé—´ï¼Œè¿”å›å¤åˆ¶ç»“æŸçš„ä½ç½®
+	 * @param InputIterator è¾“å…¥è¿­ä»£å™¨
+	 * @param ForwardIterator å‰å‘è¿­ä»£å™¨
+	 * @param first è¾“å…¥è¿­ä»£å™¨çš„èµ·å§‹ä½ç½®
+	 * @param last è¾“å…¥è¿­ä»£å™¨çš„ç»“æŸä½ç½®
+	 * @param reault è¾“å‡ºè¿­ä»£å™¨çš„ç›®æ ‡ä½ç½®
+	 * @param std::true_type ç”¨äºåŒºåˆ†æ˜¯å¦ä¸ºPODç±»å‹
+	 * @return è¿”å›å¤åˆ¶ç»“æŸçš„ä½ç½®
 	 *
 	 */
 	template <class InputIterator, class ForwardIterator>
@@ -41,14 +41,14 @@ namespace tinystl
 		auto cur = reault;
 		try {
 			for (; first != last; ++first, ++cur) {
-				// ÒÆ¶¯¹¹Ôì
+				// ç§»åŠ¨æ„é€ 
 				tinystl::construct(&*cur, *first);
 			}
 		}
-		// commit or rollback ,ÒªÃ´²ú³öËùÓĞµÄÔªËØ£¬ÒªÃ´Ò»¸ö¶¼Ã»ÓĞ
+		// commit or rollback ,è¦ä¹ˆäº§å‡ºæ‰€æœ‰çš„å…ƒç´ ï¼Œè¦ä¹ˆä¸€ä¸ªéƒ½æ²¡æœ‰
 		catch (...) {
 			for (; reault != cur; ++reault) {
-				// Îö¹¹
+				// ææ„
 				tinystl::destroy(&*reault);
 			}
 		}
@@ -57,7 +57,7 @@ namespace tinystl
 
 	template <class InputIterator, class ForwardIterator>
 	ForwardIterator uninitialized_copy(InputIterator first, InputIterator last, ForwardIterator result) {
-		// ÅĞ¶ÏÀàĞÍÊÇ·ñÎª POD ÀàĞÍ£¨Æ½·²¿½±´¸³ÖµÀàĞÍ£©£¬ÕâÀïÊ¹ÓÃÁË std::is_trivially_copy_assignable
+		// åˆ¤æ–­ç±»å‹æ˜¯å¦ä¸º POD ç±»å‹ï¼ˆå¹³å‡¡æ‹·è´èµ‹å€¼ç±»å‹ï¼‰ï¼Œè¿™é‡Œä½¿ç”¨äº† std::is_trivially_copy_assignable
 		return tinystl::_uninitialized_copy(first, last, result,
 			std::is_trivially_copy_assignable<typename std::iterator_traits<InputIterator>::value_type>{});
 	}
@@ -65,7 +65,7 @@ namespace tinystl
 
 	/** ********************************************/
 	// uninitialized_copy_n
-	// ½« [first,first + n) ·¶Î§ÄÚµÄÔªËØ¿½±´µ½ÒÔ result ÎªÆğÊ¼Î»ÖÃµÄÎ´³õÊ¼»¯¿Õ¼ä£¬·µ»Ø¸´ÖÆ½áÊøµÄÎ»ÖÃ
+	// å°† [first,first + n) èŒƒå›´å†…çš„å…ƒç´ æ‹·è´åˆ°ä»¥ result ä¸ºèµ·å§‹ä½ç½®çš„æœªåˆå§‹åŒ–ç©ºé—´ï¼Œè¿”å›å¤åˆ¶ç»“æŸçš„ä½ç½®
 	/** ********************************************/
 
 	template <class InputIterator, class Size, class ForwardIterator>
@@ -78,13 +78,13 @@ namespace tinystl
 		auto cur = result;
 		try {
 			for (; n > 0; --n, ++first, ++cur) {
-				// ÒÆ¶¯¹¹Ôì
+				// ç§»åŠ¨æ„é€ 
 				tinystl::construct(&*cur, *first);
 			}
 		}
 		catch (...) {
 			for (; result != cur; ++result) {
-				// Îö¹¹
+				// ææ„
 				tinystl::destroy(&*result);
 			}
 		}
@@ -93,7 +93,7 @@ namespace tinystl
 
 	template <class InputIterator, class Size, class ForwardIterator>
 	ForwardIterator uninitialized_copy_n(InputIterator first, Size n, ForwardIterator result) {
-		// ÅĞ¶ÏÀàĞÍÊÇ·ñÎª POD ÀàĞÍ£¨Æ½·²¿½±´¸³ÖµÀàĞÍ£©£¬
+		// åˆ¤æ–­ç±»å‹æ˜¯å¦ä¸º POD ç±»å‹ï¼ˆå¹³å‡¡æ‹·è´èµ‹å€¼ç±»å‹ï¼‰ï¼Œ
 		return tinystl::_uninitialized_copy_n(first, n, result,
 			std::is_trivially_copy_assignable<typename std::iterator_traits<InputIterator>::value_type>{});
 	}
@@ -101,7 +101,7 @@ namespace tinystl
 
 	/** ********************************************/
 	// uninitialized_fill
-	// °Ñ[first,last)·¶Î§ÄÚµÄÔªËØÌî³äÎª value
+	// æŠŠ[first,last)èŒƒå›´å†…çš„å…ƒç´ å¡«å……ä¸º value
 	/** ********************************************/
 	template <class ForwardIterator, class T>
 	void _uninitialized_fill(ForwardIterator first, ForwardIterator last, const T& value, std::true_type) {
@@ -113,13 +113,13 @@ namespace tinystl
 		auto cur = first;
 		try {
 			for (; cur != last; ++cur) {
-				// ´ø²ÎÊı¹¹Ôì£¬Ò²ÊÇÒÆ¶¯¹¹Ôì
+				// å¸¦å‚æ•°æ„é€ ï¼Œä¹Ÿæ˜¯ç§»åŠ¨æ„é€ 
 				tinystl::construct(&*cur, value);
 			}
 		}
 		catch (...) {
 			for (; first != cur; ++first) {
-				// Îö¹¹
+				// ææ„
 				tinystl::destroy(&*first);
 			}
 		}
@@ -135,7 +135,7 @@ namespace tinystl
 
 	/** ********************************************/
 	// uninitialized_fill_n
-	// °Ñ[first,first + n)·¶Î§ÄÚµÄÔªËØÌî³äÎª value
+	// æŠŠ[first,first + n)èŒƒå›´å†…çš„å…ƒç´ å¡«å……ä¸º value
 	/** ********************************************/
 
 	template <class ForwardIterator, class Size, class T>
@@ -148,7 +148,7 @@ namespace tinystl
 		auto cur = first;
 		try {
 			for (; n > 0; --n, ++cur) {
-				// ´ø²ÎÊı¹¹Ôì£¬Ò²ÊÇÒÆ¶¯¹¹Ôì
+				// å¸¦å‚æ•°æ„é€ ï¼Œä¹Ÿæ˜¯ç§»åŠ¨æ„é€ 
 				tinystl::construct(&*cur, value);
 			}
 		}
@@ -169,7 +169,7 @@ namespace tinystl
 
 	/** *******************************/
 	// uninitialized_move
-	// ½« [first,last) ·¶Î§ÄÚµÄÔªËØÒÆ¶¯¹¹Ôìµ½ÒÔ result
+	// å°† [first,last) èŒƒå›´å†…çš„å…ƒç´ ç§»åŠ¨æ„é€ åˆ°ä»¥ result
 	/** *******************************/
 
 	template <class InputIterator, class ForwardIterator>
@@ -182,13 +182,13 @@ namespace tinystl
 		auto cur = result;
 		try {
 			for (; first != last; ++first, ++cur) {
-				// ÒÆ¶¯¹¹Ôì
+				// ç§»åŠ¨æ„é€ 
 				tinystl::construct(&*cur, tinystl::move(*first));
 			}
 		}
 		catch (...) {
 			for (; result != cur; ++result) {
-				// Îö¹¹
+				// ææ„
 				tinystl::destroy(&*result);
 			}
 		}
@@ -204,7 +204,7 @@ namespace tinystl
 
 	/** *******************************/
 	// uninitialized_move_n
-	// ½« [first, first + n) ·¶Î§ÄÚµÄÔªËØÒÆ¶¯¹¹Ôì
+	// å°† [first, first + n) èŒƒå›´å†…çš„å…ƒç´ ç§»åŠ¨æ„é€ 
 	/** *******************************/
 	template <class InputIterator, class Size, class ForwardIterator>
 	ForwardIterator _uninitialized_move_n(InputIterator first, Size n, ForwardIterator result, std::true_type) {
@@ -216,13 +216,13 @@ namespace tinystl
 		auto cur = result;
 		try {
 			for (; n > 0; --n, ++first, ++cur) {
-				// ÒÆ¶¯¹¹Ôì
+				// ç§»åŠ¨æ„é€ 
 				tinystl::construct(&*cur, tinystl::move(*first));
 			}
 		}
 		catch (...) {
 			for (; result != cur; ++result) {
-				// Îö¹¹
+				// ææ„
 				tinystl::destroy(&*result);
 			}
 		}

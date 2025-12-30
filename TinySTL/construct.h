@@ -1,7 +1,7 @@
 #ifndef TINYSTL_CONSTRUCT_H_
 #define TINYSTL_CONSTRUCT_H_
 
-// Õâ¸öÍ·ÎÄ¼ş°üº¬ÁË construct £¬ÓÃÓÚ¶ÔÏóµÄ¹¹ÔìÓëÎö¹¹
+// è¿™ä¸ªå¤´æ–‡ä»¶åŒ…å«äº† construct ï¼Œç”¨äºå¯¹è±¡çš„æ„é€ ä¸ææ„
 
 
 #include <new>        // placement new
@@ -9,35 +9,35 @@
 #include "iterator.h"
 namespace tinystl
 {
-	// construct £º¸ºÔğ¶ÔÏó¹¹Ôì
+	// construct ï¼šè´Ÿè´£å¯¹è±¡æ„é€ 
 	template <class Ty>
 	void construct(Ty* ptr)
 	{
-		// ½« ptr Ç¿×ªÎª void* ÀàĞÍ£¬È»ºóÔÚ ptr ÉÏÊ¹ÓÃÄ¬ÈÏ¹¹Ôìº¯Êı
+		// å°† ptr å¼ºè½¬ä¸º void* ç±»å‹ï¼Œç„¶ååœ¨ ptr ä¸Šä½¿ç”¨é»˜è®¤æ„é€ å‡½æ•°
 		::new((void*)ptr)) Ty();
 	}
 	template <class Ty1, class Ty2>
 	void construct(Ty1* ptr, const Ty2& value)
 	{
-		// ½« ptr Ç¿×ªÎª void* ÀàĞÍ£¬È»ºóÔÚ ptr ÉÏÊ¹ÓÃ¿½±´¹¹Ôìº¯Êı
+		// å°† ptr å¼ºè½¬ä¸º void* ç±»å‹ï¼Œç„¶ååœ¨ ptr ä¸Šä½¿ç”¨æ‹·è´æ„é€ å‡½æ•°
 		::new((void*)p)) Ty1(value);
 	}
 
 	template <class Ty, class... Args>
 	void construct(Ty* ptr, Args&&... args)
 	{
-		// ´ø²ÎÊı¹¹ÔìºÍÒÆ¶¯¹¹Ôì
+		// å¸¦å‚æ•°æ„é€ å’Œç§»åŠ¨æ„é€ 
 		::new((void*)ptr) Ty(tinystl::forward<Args>(args)...);
 	}
 
-	// destroy £º¸ºÔğ¶ÔÏóÎö¹¹
+	// destroy ï¼šè´Ÿè´£å¯¹è±¡ææ„
 
 	template <class Ty>
-	// Æ½·²Îö¹¹²»×öÈÎºÎ²Ù×÷
+	// å¹³å‡¡ææ„ä¸åšä»»ä½•æ“ä½œ
 	void destory_one(Ty*, std::true_type) {}
 
 	template <class Ty>
-	// ·ÇÆ½·²Îö¹¹µ÷ÓÃÎö¹¹º¯Êı
+	// éå¹³å‡¡ææ„è°ƒç”¨ææ„å‡½æ•°
 	void destory_one(Ty* ptr, std::false_type)
 	{
 		if (ptr != nullptr) {
@@ -47,11 +47,11 @@ namespace tinystl
 
 
 	template <class ForwardIterator>
-	// Æ½·²Îö¹¹£¬²»×öÈÎºÎ´¦Àí
+	// å¹³å‡¡ææ„ï¼Œä¸åšä»»ä½•å¤„ç†
 	void destroy_cat(ForwardIterator, ForwardIterator, std::true_type) {}
 
 	template <class ForwardIterator>
-	// ·ÇÆ½·²Îö¹¹£¬Öğ¸öµ÷ÓÃÎö¹¹º¯Êı
+	// éå¹³å‡¡ææ„ï¼Œé€ä¸ªè°ƒç”¨ææ„å‡½æ•°
 	void destroy_cat(ForwardIterator first, ForwardIterator last, std::false_type)
 	{
 		for (; first != last; ++first) {
@@ -62,14 +62,14 @@ namespace tinystl
 	template <class Ty>
 	void destory(Ty* ptr)
 	{
-		// ¸ù¾İ Ty ÊÇ·ñÎªÆ½·²Îö¹¹ÀàĞÍ£¬Ñ¡Ôñ²»Í¬µÄÎö¹¹·½Ê½
+		// æ ¹æ® Ty æ˜¯å¦ä¸ºå¹³å‡¡ææ„ç±»å‹ï¼Œé€‰æ‹©ä¸åŒçš„ææ„æ–¹å¼
 		destory_one(ptr, std::is_trivially_destructible<Ty>{});
 	}
 
 	template <class ForwardIterator>
 	void destory(ForwardIterator first, ForwardIterator last)
 	{
-		// ¸ù¾İµü´úÆ÷ËùÖ¸¶ÔÏóÀàĞÍÊÇ·ñÎªÆ½·²Îö¹¹ÀàĞÍ£¬Ñ¡Ôñ²»Í¬µÄÎö¹¹·½Ê½
+		// æ ¹æ®è¿­ä»£å™¨æ‰€æŒ‡å¯¹è±¡ç±»å‹æ˜¯å¦ä¸ºå¹³å‡¡ææ„ç±»å‹ï¼Œé€‰æ‹©ä¸åŒçš„ææ„æ–¹å¼
 		destroy_cat(first, last, std::is_trivially_destructible<
 			typename iterator_traits<ForwardIterator>::value_tye>{});
 	}

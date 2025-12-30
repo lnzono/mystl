@@ -1,7 +1,7 @@
 #ifndef TINYSTL_ALLOC_H_
 #define TINYSTL_ALLOC_H_
 
-// Õâ¸öÍ·ÎÄ¼ş°üº¬ÁË alloc £¬ÓÃÓÚ·ÖÅäºÍ»ØÊÕÄÚ´æ£¬Ò»ÄÚ´æ³ØµÄ·½Ê½ÊµÏÖ
+// è¿™ä¸ªå¤´æ–‡ä»¶åŒ…å«äº† alloc ï¼Œç”¨äºåˆ†é…å’Œå›æ”¶å†…å­˜ï¼Œä¸€å†…å­˜æ± çš„æ–¹å¼å®ç°
 
 #include <new>			// placement new
 #include <cstddef>      // ptrdiff_t,size_t
@@ -10,16 +10,16 @@
 
 namespace tinystl
 {
-	//¶ş¼¶¿Õ¼äÅäÖÃÆ÷µÄÊµÏÖÄÚÈİ
-	enum { _ALIGN = 8 };//Ğ¡ĞÍÇø¿éµÄÉÏµ÷±ß½ç
-	enum { _MAX_BYTES = 128 };//Ğ¡ĞÍÇø¿éµÄÉÏÏŞ,(µ±Ç°´óÓÚ128×Ö½ÚµÄÇø¿éÓÉ malloc ·ÖÅä)
-	enum { _NFREELISTS = _MAX_BYTES / _ALIGN };//free-list ¸öÊı
+	//äºŒçº§ç©ºé—´é…ç½®å™¨çš„å®ç°å†…å®¹
+	enum { _ALIGN = 8 };//å°å‹åŒºå—çš„ä¸Šè°ƒè¾¹ç•Œ
+	enum { _MAX_BYTES = 128 };//å°å‹åŒºå—çš„ä¸Šé™,(å½“å‰å¤§äº128å­—èŠ‚çš„åŒºå—ç”± malloc åˆ†é…)
+	enum { _NFREELISTS = _MAX_BYTES / _ALIGN };//free-list ä¸ªæ•°
 
-	// @brief ¹²ÓÃÌå FreeLiset ²ÉÓÃÁ´±íµÄ·½Ê½¹ÜÀíÄÚ´æ£¬·ÖÅäÓë»ØÊÕĞ¡ÄÚ´æÇø¿é
-	// ÕâÀïÎ´Ê¹ÓÃ volatile ,ÒòÎª²»Éæ¼°µ½¶àÏß³ÌµÄÇé¿ö£¬Ïê¼û Notes\Allocators\note2.md
+	// @brief å…±ç”¨ä½“ FreeLiset é‡‡ç”¨é“¾è¡¨çš„æ–¹å¼ç®¡ç†å†…å­˜ï¼Œåˆ†é…ä¸å›æ”¶å°å†…å­˜åŒºå—
+	// è¿™é‡Œæœªä½¿ç”¨ volatile ,å› ä¸ºä¸æ¶‰åŠåˆ°å¤šçº¿ç¨‹çš„æƒ…å†µï¼Œè¯¦è§ Notes\Allocators\note2.md
 	union FreeList {
-		union FreeList* next; // Ö¸ÏòÏÂÒ»¸öÇø¿é
-		char data[1]; // ±¾Çø¿éµÄÆğÊ¼Î»ÖÃ
+		union FreeList* next; // æŒ‡å‘ä¸‹ä¸€ä¸ªåŒºå—
+		char data[1]; // æœ¬åŒºå—çš„èµ·å§‹ä½ç½®
 	};
 
 	class alloc {
@@ -28,7 +28,7 @@ namespace tinystl
 		static char* end_free;
 		static size_t heap_size;
 
-		static FreeList* free_list[_NFREELISTS]; //	16 Ìõ free-list Á´±í,ÉêÇëÄÚ´æÊ±£¬»á±»·ÖÅäµ½×î½üµÄ¶ÔÆë¿éÖĞ
+		static FreeList* free_list[_NFREELISTS]; //	16 æ¡ free-list é“¾è¡¨,ç”³è¯·å†…å­˜æ—¶ï¼Œä¼šè¢«åˆ†é…åˆ°æœ€è¿‘çš„å¯¹é½å—ä¸­
 
 	public:
 		static void* allocate(size_t n);
@@ -36,17 +36,17 @@ namespace tinystl
 		static void* reallocate(void* p, size_t old_sz, size_t new_sz);
 
 	private:
-		static size_t ROUND_UP(size_t bytes); // ÉÏµ÷±ß½çÖÁ8µÄ±¶Êı
-		static size_t FREELIST_INDEX(size_t bytes); // ¸ù¾İÇø¿é´óĞ¡¼ÆËã free-list µÄÏÂ±ê
-		static void* refill(size_t n); // ÖØĞÂÌî³ä free-list
-		static char* chunk_alloc(size_t size, size_t& nobjs); // ´ÓÄÚ´æ³ØÖĞÈ¡¿Õ¼ä¸ø free-list Ê¹ÓÃ
+		static size_t ROUND_UP(size_t bytes); // ä¸Šè°ƒè¾¹ç•Œè‡³8çš„å€æ•°
+		static size_t FREELIST_INDEX(size_t bytes); // æ ¹æ®åŒºå—å¤§å°è®¡ç®— free-list çš„ä¸‹æ ‡
+		static void* refill(size_t n); // é‡æ–°å¡«å…… free-list
+		static char* chunk_alloc(size_t size, size_t& nobjs); // ä»å†…å­˜æ± ä¸­å–ç©ºé—´ç»™ free-list ä½¿ç”¨
 
 	};
 
-	// ¾²Ì¬³ÉÔ±±äÁ¿µÄ³õÊ¼»¯
-	char* alloc::start_free = nullptr; // ÄÚ´æ³ØÆğÊ¼Î»ÖÃ
-	char* alloc::end_free = nullptr; //	ÄÚ´æ³Ø½áÊøÎ»ÖÃ
-	size_t alloc::heap_size = 0; //	ÉêÇë heap ¿Õ¼ä¸½¼ÓÖµµÄ´óĞ¡
+	// é™æ€æˆå‘˜å˜é‡çš„åˆå§‹åŒ–
+	char* alloc::start_free = nullptr; // å†…å­˜æ± èµ·å§‹ä½ç½®
+	char* alloc::end_free = nullptr; //	å†…å­˜æ± ç»“æŸä½ç½®
+	size_t alloc::heap_size = 0; //	ç”³è¯· heap ç©ºé—´é™„åŠ å€¼çš„å¤§å°
 
 	FreeList* alloc::free_list[__NFREELISTS] = {
 	   nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,
@@ -54,59 +54,59 @@ namespace tinystl
 	};
 
 	/**
-	 * @brief ·ÖÅä n ×Ö½Ú´óĞ¡µÄÄÚ´æ
-	 * @param n ·ÖÅä¿Õ¼äµÄ´óĞ¡
-	 * @return ·ÖÅä¿Õ¼äµÄÊ×µØÖ·
+	 * @brief åˆ†é… n å­—èŠ‚å¤§å°çš„å†…å­˜
+	 * @param n åˆ†é…ç©ºé—´çš„å¤§å°
+	 * @return åˆ†é…ç©ºé—´çš„é¦–åœ°å€
 	 *
 	 */
 	void* alloc::allocate(size_t n)
 	{
-		FreeList* my_free_list; // Ö¸Ïò¶ÔÓ¦ free-list µÄÖ¸Õë
-		FreeList* result; // ·µ»Ø¿Õ¼äµÄÊ×µØÖ·
+		FreeList* my_free_list; // æŒ‡å‘å¯¹åº” free-list çš„æŒ‡é’ˆ
+		FreeList* result; // è¿”å›ç©ºé—´çš„é¦–åœ°å€
 
-		// ´óÓÚ128×Ö½ÚµÄÇø¿éÖ±½Óµ÷ÓÃ malloc ·ÖÅä(Ò»¼¶ÅäÖÃÆ÷)
+		// å¤§äº128å­—èŠ‚çš„åŒºå—ç›´æ¥è°ƒç”¨ malloc åˆ†é…(ä¸€çº§é…ç½®å™¨)
 		if (n > static_cast<size_t>(_MAX_BYTES)) {
-			// TODO £ºÒ»¼¶ÅäÖÃÆ÷
+			// TODO ï¼šä¸€çº§é…ç½®å™¨
 			return std::malloc(n);
 		}
 
 		my_free_list = free_list + FREELIST_INDEX(n);
 		result = *my_free_list;
-		// Èç¹û¶ÔÓ¦ free-list Îª¿Õ£¬ÔòĞèÒªÖØĞÂÌî³ä
+		// å¦‚æœå¯¹åº” free-list ä¸ºç©ºï¼Œåˆ™éœ€è¦é‡æ–°å¡«å……
 		if (result == nullptr) {
 			void* r = refill(ROUND_UP(n));
 			return r;
 		}
-		*my_free_list = result->next; // ¸üĞÂ free-list Ê×µØÖ·£¬Ö¸ÏòÏÂÒ»¸öÇø¿é
+		*my_free_list = result->next; // æ›´æ–° free-list é¦–åœ°å€ï¼ŒæŒ‡å‘ä¸‹ä¸€ä¸ªåŒºå—
 		return result;
 	}
 
 	/**
-	 * @brief »ØÊÕ p Ö¸ÏòµÄ n ×Ö½Ú´óĞ¡µÄÄÚ´æ
-	 * @param p ´ı»ØÊÕ¿Õ¼äµÄÊ×µØÖ·
-	 * @param n ´ı»ØÊÕ¿Õ¼äµÄ´óĞ¡
+	 * @brief å›æ”¶ p æŒ‡å‘çš„ n å­—èŠ‚å¤§å°çš„å†…å­˜
+	 * @param p å¾…å›æ”¶ç©ºé—´çš„é¦–åœ°å€
+	 * @param n å¾…å›æ”¶ç©ºé—´çš„å¤§å°
 	 */
 	void alloc::deallocate(void* p, size_t n) {
-		// ´óÓÚ128×Ö½ÚµÄÇø¿éÖ±½Óµ÷ÓÃ free »ØÊÕ(Ò»¼¶ÅäÖÃÆ÷)
+		// å¤§äº128å­—èŠ‚çš„åŒºå—ç›´æ¥è°ƒç”¨ free å›æ”¶(ä¸€çº§é…ç½®å™¨)
 		if (n > static_cast<size_t>(_MAX_BYTES)) {
-			// TODO £ºÒ»¼¶ÅäÖÃÆ÷
+			// TODO ï¼šä¸€çº§é…ç½®å™¨
 			std::free(p);
 			return;
 		}
 
-		// ½« p ×ª»»Îª FreeList* ÀàĞÍ£¬¹ØÓÚ reinterpret_cast ¿É²Î¿¼ Notes\Cpp\note2.md
+		// å°† p è½¬æ¢ä¸º FreeList* ç±»å‹ï¼Œå…³äº reinterpret_cast å¯å‚è€ƒ Notes\Cpp\note2.md
 		FreeList* q = reinterpret_cast<FreeList*> (p);
 		FreeList** my_free_list = free_list + FREELIST_INDEX(n);
-		q->next = *my_free_list; // ½«»ØÊÕµÄÇø¿é²åÈëµ½ free-list µÄÊ×²¿
-		*my_free_list = q; // ¸üĞÂ free-list µÄÊ×µØÖ·,ºóĞø¾ÍÄÜÕı³£Ê¹ÓÃ¸ÃÁ´±í
+		q->next = *my_free_list; // å°†å›æ”¶çš„åŒºå—æ’å…¥åˆ° free-list çš„é¦–éƒ¨
+		*my_free_list = q; // æ›´æ–° free-list çš„é¦–åœ°å€,åç»­å°±èƒ½æ­£å¸¸ä½¿ç”¨è¯¥é“¾è¡¨
 	}
 
 	/**
-	 * @brief ÖØĞÂ·ÖÅä p Ö¸ÏòµÄÄÚ´æÇø¿é
-	 * @param p Ö¸Ïò¿Õ¼äµÄÊ×µØÖ·
-	 * @param old_sz ¾É¿Õ¼äµÄ´óĞ¡
-	 * @param new_sz ĞÂ¿Õ¼äµÄ´óĞ¡
-	 * return ĞÂ¿Õ¼äµÄÊ×µØÖ·
+	 * @brief é‡æ–°åˆ†é… p æŒ‡å‘çš„å†…å­˜åŒºå—
+	 * @param p æŒ‡å‘ç©ºé—´çš„é¦–åœ°å€
+	 * @param old_sz æ—§ç©ºé—´çš„å¤§å°
+	 * @param new_sz æ–°ç©ºé—´çš„å¤§å°
+	 * return æ–°ç©ºé—´çš„é¦–åœ°å€
 	 * .
 	 */
 	void* alloc::reallocate(void* p, size_t old_sz, size_t new_sz) {
@@ -116,35 +116,35 @@ namespace tinystl
 	}
 
 	/**
-	 * @brief ½« bytes ÉÏµ÷ÖÁ¶ÔÓ¦Çø¼ä´óĞ¡
-	 * @param bytes ÉêÇëÇø¿é´óĞ¡
-	 * @return ÉÏµ÷ºóµÄ¿Õ¼ä´óĞ¡
+	 * @brief å°† bytes ä¸Šè°ƒè‡³å¯¹åº”åŒºé—´å¤§å°
+	 * @param bytes ç”³è¯·åŒºå—å¤§å°
+	 * @return ä¸Šè°ƒåçš„ç©ºé—´å¤§å°
 	 */
 	size_t alloc::ROUND_UP(size_t bytes) {
-		// Âß¼­µÈ¼ÛÓÚ £¨bytes + (_ALIGN - 1)) / _ALIGN * _ALIGN Î»ÔËËã¿ì£¬Òò´ËÊ¹ÓÃ
+		// é€»è¾‘ç­‰ä»·äº ï¼ˆbytes + (_ALIGN - 1)) / _ALIGN * _ALIGN ä½è¿ç®—å¿«ï¼Œå› æ­¤ä½¿ç”¨
 		return (bytes + _ALIGN - 1) & ~(_ALIGN - 1);
 	}
 
 	/**
-	 * @brief ¸ù¾İÇø¿é´óĞ¡¼ÆËã free-list µÄÏÂ±ê
-	 * @param bytes Çø¿é´óĞ¡
-	 * @return free-list µÄÏÂ±ê
+	 * @brief æ ¹æ®åŒºå—å¤§å°è®¡ç®— free-list çš„ä¸‹æ ‡
+	 * @param bytes åŒºå—å¤§å°
+	 * @return free-list çš„ä¸‹æ ‡
 	 */
 	size_t alloc::FREELIST_INDEX(size_t bytes)
 	{
-		// ÉÏµ÷¶ÔÆë£º±£Ö¤ÄÜ±» _ALIGN Õû³ı£¨Èç 8,16,24, ...£©
-		// È»ºó³ıÒÔ _ALIGN µÃµ½¡°µÚ¼¸¸ö 8 ×Ö½Úµ¥Î»¡±
-		// ÔÙ¼õ 1 Ê¹½á¹û±ä³É´Ó 0 ¿ªÊ¼µÄÊı×éÏÂ±ê¡£
+		// ä¸Šè°ƒå¯¹é½ï¼šä¿è¯èƒ½è¢« _ALIGN æ•´é™¤ï¼ˆå¦‚ 8,16,24, ...ï¼‰
+		// ç„¶åé™¤ä»¥ _ALIGN å¾—åˆ°â€œç¬¬å‡ ä¸ª 8 å­—èŠ‚å•ä½â€
+		// å†å‡ 1 ä½¿ç»“æœå˜æˆä» 0 å¼€å§‹çš„æ•°ç»„ä¸‹æ ‡ã€‚
 		return ((bytes)+_ALIGN - 1) / _ALIGN - 1;
 	}
 
 	/**
-	 * @brief ÖØĞÂÌî³ä free-list
-	 * @param n ÉêÇëµÄÇø¿é´óĞ¡
-	 * @return ÉêÇëµ½µÄÇø¿éÊ×µØÖ·
+	 * @brief é‡æ–°å¡«å…… free-list
+	 * @param n ç”³è¯·çš„åŒºå—å¤§å°
+	 * @return ç”³è¯·åˆ°çš„åŒºå—é¦–åœ°å€
 	 */
 	void* alloc::refill(size_t n) {
-		size_t nblock = 20; // Ò»´ÎĞÔÉêÇëµÄÇø¿é¸öÊı
+		size_t nblock = 20; // ä¸€æ¬¡æ€§ç”³è¯·çš„åŒºå—ä¸ªæ•°
 		char* chunk = chunk_alloc(n, nblock);
 		FreeList** my_free_list;
 		FreeList* result, * cur, * next;
@@ -154,14 +154,14 @@ namespace tinystl
 		}
 
 		my_free_list = free_list + FREELIST_INDEX(n);
-		result = (FreeList*)chunk; // ·µ»Ø¿Õ¼äµÄÊ×µØÖ·
-		// ÓÉÓÚ½«µÚÒ»¸öÇø¿é×÷Îª·µ»ØÖµ£¬Òò´ËĞèÒª½« free-list µÄÊ×µØÖ·±ãÒË n ¸ö×Ö½Ú£¬Ö¸ÏòÏÂÒ»¸öÇø¿é
+		result = (FreeList*)chunk; // è¿”å›ç©ºé—´çš„é¦–åœ°å€
+		// ç”±äºå°†ç¬¬ä¸€ä¸ªåŒºå—ä½œä¸ºè¿”å›å€¼ï¼Œå› æ­¤éœ€è¦å°† free-list çš„é¦–åœ°å€ä¾¿å®œ n ä¸ªå­—èŠ‚ï¼ŒæŒ‡å‘ä¸‹ä¸€ä¸ªåŒºå—
 		*my_free_list = next = (FreeList*)(chunk + n);
-		// ½«Ê£ÓàµÄÇø¿é ²åÈëµ½ free-list ÖĞ
+		// å°†å‰©ä½™çš„åŒºå— æ’å…¥åˆ° free-list ä¸­
 
 		for (size_t i = 1; ; i++) {
 			cur = next;
-			next = (FreeList*)((char*)next + n); // Ö¸ÏòÏÂÒ»¸öÇø¿é
+			next = (FreeList*)((char*)next + n); // æŒ‡å‘ä¸‹ä¸€ä¸ªåŒºå—
 			if (nblock - 1 == i) {
 				cur->next = nullptr;
 				break;
@@ -174,52 +174,52 @@ namespace tinystl
 	}
 
 	/**
-	 * @brief ´ÓÄÚ´æ³ØÖĞÈ¡¿Õ¼ä¸ø free-list Ê¹ÓÃ
-	 * @param size ÉêÇëÇø¿é´óĞ¡
-	 * @param nobjs ÉêÇëÇø¿é¸öÊı
-	 * @return ÉêÇëµ½µÄÇø¿éÊ×µØÖ·
+	 * @brief ä»å†…å­˜æ± ä¸­å–ç©ºé—´ç»™ free-list ä½¿ç”¨
+	 * @param size ç”³è¯·åŒºå—å¤§å°
+	 * @param nobjs ç”³è¯·åŒºå—ä¸ªæ•°
+	 * @return ç”³è¯·åˆ°çš„åŒºå—é¦–åœ°å€
 	 */
 	char* alloc::chunk_alloc(size_t size, size_t& nobjs) {
 		char* result;
-		size_t total_bytes = size * nobjs; // ĞèÒªÉêÇëµÄ×Ü×Ö½ÚÊı
-		size_t bytes_left = end_free - start_free; // ÄÚ´æ³ØÊ£Óà¿Õ¼ä´óĞ¡
+		size_t total_bytes = size * nobjs; // éœ€è¦ç”³è¯·çš„æ€»å­—èŠ‚æ•°
+		size_t bytes_left = end_free - start_free; // å†…å­˜æ± å‰©ä½™ç©ºé—´å¤§å°
 
-		// Èç¹ûÄÚ´æ³ØÊ£Óà¿Õ¼ä×ã¹»£¬Ö±½Ó·µ»ØÄÚ´æ³ØµÄÊ×µØÖ·
+		// å¦‚æœå†…å­˜æ± å‰©ä½™ç©ºé—´è¶³å¤Ÿï¼Œç›´æ¥è¿”å›å†…å­˜æ± çš„é¦–åœ°å€
 		if (bytes_left >= total_bytes) {
 			result = start_free;
 			start_free += total_bytes;
 			return result;
 		}
-		// Èç¹ûÄÚ´æ³ØÊ£Óà¿Õ¼ä²»¹»·ÖÅä£¬µ«×ã¹»·ÖÅäÒ»¸öÇø¿é£¬Ö±½Ó·µ»ØÄÚ´æ³ØµÄÊ×µØÖ·
+		// å¦‚æœå†…å­˜æ± å‰©ä½™ç©ºé—´ä¸å¤Ÿåˆ†é…ï¼Œä½†è¶³å¤Ÿåˆ†é…ä¸€ä¸ªåŒºå—ï¼Œç›´æ¥è¿”å›å†…å­˜æ± çš„é¦–åœ°å€
 		else if (bytes_left >= size) {
-			nobjs = bytes_left / size; // ¼ÆËãÄÜ·ÖÅä¶àÉÙ¸öÇø¿é
+			nobjs = bytes_left / size; // è®¡ç®—èƒ½åˆ†é…å¤šå°‘ä¸ªåŒºå—
 			total_bytes = size * nobjs;
 			result = start_free;
 			start_free += total_bytes;
 			return result;
 		}
-		// ÄÚ´æ³ØÊ£Óà¿Õ¼ä²»¹»Ò»¸öÇø¿é
+		// å†…å­˜æ± å‰©ä½™ç©ºé—´ä¸å¤Ÿä¸€ä¸ªåŒºå—
 		else {
 			if (bytes_left > 0) {
-				// ½«ÄÚ´æ³ØÊ£Óà¿Õ¼ä¼ÓÈëµ½¶ÔÓ¦µÄ free-list ÖĞ
+				// å°†å†…å­˜æ± å‰©ä½™ç©ºé—´åŠ å…¥åˆ°å¯¹åº”çš„ free-list ä¸­
 				FreeList** my_free_list = free_list + FREELIST_INDEX(bytes_left);
 				((FreeList*)start_free)->next = *my_free_list;
 				*my_free_list = (FreeList*)start_free;
 			}
 
-			// malloc ÉêÇë heap ÖĞÁ½±¶+¶îÍâ´óĞ¡µÄÄÚ´æ
+			// malloc ç”³è¯· heap ä¸­ä¸¤å€+é¢å¤–å¤§å°çš„å†…å­˜
 			size_t bytes_to_get = (total_bytes << 1) + ROUND_UP(heap_size >> 4);
-			start_free = (char*)std::malloc(bytes_to_get); // TODO Ò»¼¶ÅäÖÃÆ÷
+			start_free = (char*)std::malloc(bytes_to_get); // TODO ä¸€çº§é…ç½®å™¨
 
-			// heap ¿Õ¼ä²»×ã£¬malloc Ê§°Ü
+			// heap ç©ºé—´ä¸è¶³ï¼Œmalloc å¤±è´¥
 			if (start_free == nullptr) {
 				FreeList** my_free_list, * p;
-				// ÔÚ free-list ÖĞÑ°ÕÒÊÇ·ñÓĞÉĞÎ´Ê¹ÓÃÇÒ×ã¹»´óµÄÇø¿é
+				// åœ¨ free-list ä¸­å¯»æ‰¾æ˜¯å¦æœ‰å°šæœªä½¿ç”¨ä¸”è¶³å¤Ÿå¤§çš„åŒºå—
 				for (size_t i = size; i < _MAX_BYTES; i += _ALIGN) {
 					my_free_list = free_list + FREELIST_INDEX(i);
 					p = *my_free_list;
 
-					// ÉĞÓĞÎ´ÓÃµÄÇø¿é
+					// å°šæœ‰æœªç”¨çš„åŒºå—
 					if (p != nullptr) {
 						*my_free_list = p->next;
 						*start_free = (char*)p;
@@ -228,14 +228,14 @@ namespace tinystl
 					}
 				}
 
-				// Èç¹ûÒ»µãÄÚ´æ¶¼Ã»ÓĞ£¬Ö»ÄÜµ÷ÓÃÒ»¼¶ÅäÖÃÆ÷ÉêÇëÄÚ´æ£¬²¢ÇÒÓÃ»§Ã»ÓĞÉèÖÃ´¦ÀíÀı³Ì¾ÍÅ×Òì³£
+				// å¦‚æœä¸€ç‚¹å†…å­˜éƒ½æ²¡æœ‰ï¼Œåªèƒ½è°ƒç”¨ä¸€çº§é…ç½®å™¨ç”³è¯·å†…å­˜ï¼Œå¹¶ä¸”ç”¨æˆ·æ²¡æœ‰è®¾ç½®å¤„ç†ä¾‹ç¨‹å°±æŠ›å¼‚å¸¸
 				std::printf("out of memory\n");
 				end_free = nullptr;
-				throw std::bad_alloc(); // TODO Ò»¼¶ÅäÖÃÆ÷ ¼°Æä handle
+				throw std::bad_alloc(); // TODO ä¸€çº§é…ç½®å™¨ åŠå…¶ handle
 
 			}
 
-			// ·ÖÅä³É¹¦£¬¸üĞÂÄÚ´æ³ØµÄ½áÊøÎ»ÖÃ,ÖØĞÂµ÷ÓÃ chunk_alloc ·ÖÅäÄÚ´æ
+			// åˆ†é…æˆåŠŸï¼Œæ›´æ–°å†…å­˜æ± çš„ç»“æŸä½ç½®,é‡æ–°è°ƒç”¨ chunk_alloc åˆ†é…å†…å­˜
 			heap_size += bytes_to_get;
 			end_free = start_free + bytes_to_get;
 			return chunk_alloc(size, nobjs);
