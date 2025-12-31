@@ -14,13 +14,13 @@ namespace tinystl
 	void construct(Ty* ptr)
 	{
 		// 将 ptr 强转为 void* 类型，然后在 ptr 上使用默认构造函数
-		::new((void*)ptr)) Ty();
+		::new((void*)ptr) Ty();
 	}
 	template <class Ty1, class Ty2>
 	void construct(Ty1* ptr, const Ty2& value)
 	{
 		// 将 ptr 强转为 void* 类型，然后在 ptr 上使用拷贝构造函数
-		::new((void*)p)) Ty1(value);
+		::new((void*)p) Ty1(value);
 	}
 
 	template <class Ty, class... Args>

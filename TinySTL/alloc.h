@@ -61,7 +61,7 @@ namespace tinystl
 	 */
 	void* alloc::allocate(size_t n)
 	{
-		FreeList* my_free_list; // 指向对应 free-list 的指针
+		FreeList** my_free_list; // 指向对应 free-list 的指针
 		FreeList* result; // 返回空间的首地址
 
 		// 大于128字节的区块直接调用 malloc 分配(一级配置器)
@@ -222,9 +222,9 @@ namespace tinystl
 					// 尚有未用的区块
 					if (p != nullptr) {
 						*my_free_list = p->next;
-						*start_free = (char*)p;
-						*end_free = start_free + i;
-						return charn_alloc(size, nobjs);
+						start_free = (char*)p;
+						end_free = start_free + i;
+						return chunk_alloc(size, nobjs);
 					}
 				}
 

@@ -25,20 +25,20 @@ namespace tinystl
 	 * @param ForwardIterator 前向迭代器
 	 * @param first 输入迭代器的起始位置
 	 * @param last 输入迭代器的结束位置
-	 * @param reault 输出迭代器的目标位置
+	 * @param result 输出迭代器的目标位置
 	 * @param std::true_type 用于区分是否为POD类型
 	 * @return 返回复制结束的位置
 	 *
 	 */
 	template <class InputIterator, class ForwardIterator>
-	ForwardIterator _uninitialized_copy(InputIterator first, InputIterator last, ForwardIterator reault, std::true_type) {
-		return tinystl::copy(first, last, reault); //algobase.h
+	ForwardIterator _uninitialized_copy(InputIterator first, InputIterator last, ForwardIterator result, std::true_type) {
+		return tinystl::copy(first, last, result); //algobase.h
 	}
 
 
 	template <class InputIterator, class ForwardIterator>
-	ForwardIterator _uninitialized_copy(InputIterator first, InputIterator last, ForwardIterator reault, std::false_type) {
-		auto cur = reault;
+	ForwardIterator _uninitialized_copy(InputIterator first, InputIterator last, ForwardIterator result, std::false_type) {
+		auto cur = result;
 		try {
 			for (; first != last; ++first, ++cur) {
 				// 移动构造
@@ -47,9 +47,9 @@ namespace tinystl
 		}
 		// commit or rollback ,要么产出所有的元素，要么一个都没有
 		catch (...) {
-			for (; reault != cur; ++reault) {
+			for (; result != cur; ++result) {
 				// 析构
-				tinystl::destroy(&*reault);
+				tinystl::destroy(&*result);
 			}
 		}
 		return cur;

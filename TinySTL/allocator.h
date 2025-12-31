@@ -53,7 +53,7 @@ namespace tinystl {
 	T* allocator<T>::allocate(size_type n) {
 		if (n == 0)return nullpter;
 		// 使用全局的 ::operator new 分配内存,分配 n 个T 大小的内存并进行类型转换
-		return static_cast<T*>(::operator new(sizeof(T) * n);
+		return static_cast<T*>(::operator new (n * sizeof(T)));
 	}
 
 	template <class T>
@@ -75,7 +75,7 @@ namespace tinystl {
 		tinystl::construct(ptr); // 默认构造
 	}
 
-	template <class>
+	template <class T>
 	void allocator<T>::construct(T* ptr, const T& value) {
 		tinystl::construct(ptr, value); // 拷贝构造
 	}
